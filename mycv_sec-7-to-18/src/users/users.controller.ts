@@ -13,7 +13,10 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import { UserDto } from 'src/users/dtos/user.dto';
+import { Serialize } from 'src/interceptors/serialize.interceptors';
 
+@Serialize(UserDto)
 @Controller('auth')
 export class UsersController {
   constructor(private usersService: UsersService) {}
@@ -22,7 +25,6 @@ export class UsersController {
     return this.usersService.create(body.email, body.password);
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Get('/user/:id')
   findUser(@Param('id') id: string) {
     return this.usersService.findOne(parseInt(id));
